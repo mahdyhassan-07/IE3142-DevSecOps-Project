@@ -1,0 +1,46 @@
+name: Security CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: SAST - Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/javascript
+
+      - name: Dependency Security - npm audit
+        run: npm audit --audit-level=high
+
+      - name: Secrets Scan - Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Build Docker image
+        run: docker build -t nodegoat:ci .
+
+      - name: Container Security - Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: nodegoat:ci
+          format: table
+          exit-code: '1'
+          severity: 'HIGH,CRITICAL'
