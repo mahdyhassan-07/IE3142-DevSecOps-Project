@@ -2,6 +2,90 @@
 
 Being lightweight, fast, and scalable, Node.js is becoming a widely adopted platform for developing web applications. This project provides an environment to learn how OWASP Top 10 security risks apply to web applications developed using Node.js and how to effectively address them.
 
+## IE3142 DevSecOps Project Setup
+
+This repository is used for the IE3142 DevOps Security group assignment and is based on the OWASP NodeGoat application.
+
+The project runs the NodeGoat/RetireEasy web application together with a MongoDB database using Docker Compose.
+
+### Prerequisites
+
+Before running the application, install:
+
+- Git
+- Docker Desktop
+
+Docker Compose is included with current Docker Desktop installations.
+
+### Clone the Repository
+
+Clone this group's repository:
+
+```bash
+git clone https://github.com/mahdyhassan-07/IE3142-DevSecOps-Project.git
+```
+
+Move into the project directory:
+
+```bash
+cd IE3142-DevSecOps-Project
+```
+
+### Build the Application
+
+Build the Docker images:
+
+```bash
+docker compose build
+```
+
+### Start the Application
+
+Start the NodeGoat web application and MongoDB services in the background:
+
+```bash
+docker compose up -d
+```
+
+The NodeGoat/RetireEasy application can then be accessed at:
+
+`http://localhost:4000`
+
+The NodeGoat tutorial can be accessed at:
+
+`http://localhost:4000/tutorial`
+
+### Verify the Docker Services
+
+Confirm that both the web application and MongoDB services are running:
+
+```bash
+docker compose ps
+```
+
+The output should show both the `web` and `mongo` services running.
+
+### Stop the Application
+
+Stop the application and Docker services using:
+
+```bash
+docker compose down
+```
+
+### Application Components
+
+The Docker Compose environment contains two main services:
+
+- `web` - NodeGoat/RetireEasy Node.js and Express web application
+- `mongo` - MongoDB 4.4 database
+
+The web application connects to MongoDB using:
+
+`mongodb://mongo:27017/nodegoat`
+
+The NodeGoat web application is exposed to the host through port `4000`.
+
 ## Getting Started
 
 OWASP Top 10 for Node.js web applications:
