@@ -225,7 +225,7 @@ Data crossing this boundary includes:
 - URL and query parameters.
 - Session identifiers and cookies.
 
-**Related data flows:** DF1 (Browser to NodeGoat) and DF3 (NodeGoat to Browser).
+**Related data flows:** DF1 (Browser to NodeGoat) and DF2 (NodeGoat to Browser).
 
 **Security considerations:** Authentication, authorization, input validation,
 output encoding, and secure session management must be enforced at this
@@ -253,7 +253,7 @@ Data crossing this boundary includes:
 - Profile and financial information.
 - Application data retrieved through database queries.
 
-**Related data flows:** DF2 (NodeGoat to MongoDB).
+**Related data flows:** DF3 (NodeGoat to MongoDB) and DF4 (MongoDB to NodeGoat)
 
 **Security considerations:** Database queries must be constructed safely,
 application access to the database should follow least privilege, and
