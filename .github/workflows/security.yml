@@ -24,24 +24,43 @@ jobs:
         run: npm test
 
       - name: SAST - Semgrep
+        id: semgrep
         continue-on-error: true
         uses: semgrep/semgrep-action@v1
         with:
           config: p/javascript
 
       - name: Dependency Security - npm audit
+        id: npm_audit
+        continue-on-error: true
         run: npm audit --audit-level=high
 
       - name: Secrets Scan - Gitleaks
+        id: gitleaks
+        continue-on-error: true
         uses: gitleaks/gitleaks-action@v2
 
       - name: Build Docker image
         run: docker build -t nodegoat:ci .
 
       - name: Container Security - Trivy
+        id: trivy
+        continue-on-error: true
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: nodegoat:ci
           format: table
           exit-code: '1'
           severity: 'HIGH,CRITICAL'
+       
+      - name: Security Gate Result
+        if: always()
+        run: |
+          if [ "${{ steps.semgrep.outcome }}" != "success" ] || \
+             [ "${{ steps.npm_audit.outcome }}" != "success" ] || \
+             [ "${{ steps.gitleaks.outcome }}" != "success" ] || \
+             [ "${{ steps.trivy.outcome }}" != "success" ]; then
+            echo "One or more security gates failed."
+            exit 1
+          fi
+          echo "All security gates passed."
