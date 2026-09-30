@@ -13,12 +13,14 @@ function AllocationsHandler(db) {
         // Fix for A4 Insecure DOR -  take user id from session instead of from URL param
         const { userId } = req.session;
         */
-        const {
-            userId
-        } = req.params;
-        const {
-            threshold
-        } = req.query;
+       // Fix for A4 Insecure DOR - use authenticated user's ID from session
+    const {
+        userId
+    } = req.session; // fixed IDOR vulnerability 
+
+    const {
+        threshold
+    } = req.query;
 
         allocationsDAO.getByUserIdAndThreshold(userId, threshold, (err, allocations) => {
             if (err) return next(err);
