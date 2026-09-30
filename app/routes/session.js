@@ -113,8 +113,14 @@ function SessionHandler(db) {
             // by wrapping the below code as a function callback for the method req.session.regenerate()
             // i.e:
             // `req.session.regenerate(() => {})`
-            req.session.userId = user._id;
-            return res.redirect(user.isAdmin ? "/benefits" : "/dashboard");
+            req.session.regenerate((err) => {
+                if (err) {
+                    return next(err);
+                }
+            
+                req.session.userId = user._id;
+                return res.redirect(user.isAdmin ? "/benefits" : "/dashboard");
+            }); // fixing weak session handling vulnerability 
         });
     };
 
