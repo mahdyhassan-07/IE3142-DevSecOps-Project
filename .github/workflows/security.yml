@@ -56,6 +56,11 @@ jobs:
       - name: Security Gate Result
         if: always()
         run: |
+          echo "Semgrep: ${{ steps.semgrep.outcome }}"
+          echo "npm audit: ${{ steps.npm_audit.outcome }}"
+          echo "Gitleaks: ${{ steps.gitleaks.outcome }}"
+          echo "Trivy: ${{ steps.trivy.outcome }}"
+
           if [ "${{ steps.semgrep.outcome }}" != "success" ] || \
              [ "${{ steps.npm_audit.outcome }}" != "success" ] || \
              [ "${{ steps.gitleaks.outcome }}" != "success" ] || \
@@ -63,4 +68,5 @@ jobs:
             echo "One or more security gates failed."
             exit 1
           fi
+
           echo "All security gates passed."
